@@ -255,7 +255,7 @@ int gui_setpath(char *path)
 							break;
 						}
 					}
-					if(gui_event.key.keysym.sym == SDLK_LCTRL) {
+					if(gui_event.key.keysym.sym == SDLK_LALT) {
 						if(current_column == 1) {
 							repeat = 0;
 							chdir(dir_list[current_dir_selection]);
@@ -269,7 +269,7 @@ int gui_setpath(char *path)
 							}
 						}*/
 					}
-					if(gui_event.key.keysym.sym == SDLK_LALT || gui_event.key.keysym.sym == SDLK_ESCAPE) {
+					if(gui_event.key.keysym.sym == SDLK_LCTRL || gui_event.key.keysym.sym == SDLK_ESCAPE) {
 						return_value = -1;
 						repeat = 0;
 						break;

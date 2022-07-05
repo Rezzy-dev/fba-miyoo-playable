@@ -683,7 +683,7 @@ void ss_prg_options(void)
 							cfg.skin ^= 1;
 							break;
 					}
-				} else if(event.key.keysym.sym == SDLK_LCTRL) {
+				} else if(event.key.keysym.sym == SDLK_LALT) {
 					if(options_num >= OPTION_GUI_PATH0 && options_num <= OPTION_GUI_PATH6) {
 						// call set path menu
 						gui_setpath(szAppRomPaths[options_num - OPTION_GUI_PATH0]);
@@ -695,7 +695,7 @@ void ss_prg_options(void)
 					if(options_num >= OPTION_GUI_PATH0 && options_num <= OPTION_GUI_PATH6) {
 						strcpy(szAppRomPaths[options_num - OPTION_GUI_PATH0], "");
 					}
-				} else if(event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_LALT) {
+				} else if(event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_LCTRL) {
 					prep_bg();
 					Quit = 1;
 				}
@@ -888,7 +888,7 @@ void ss_prog_run(void)
 							if(options.sense > 100) options.sense = 0;
 							break;
 					}
-				} else if (event.key.keysym.sym == SDLK_LCTRL) {
+				} else if (event.key.keysym.sym == SDLK_LALT) {
 					save_lastsel();
 
 					nBurnDrvSelect = romsort[cfg.list][sel.rom];
@@ -908,7 +908,7 @@ void ss_prog_run(void)
 
 					prep_bg();
 					Quit = 1;
-				} else if(event.key.keysym.sym == SDLK_LALT || event.key.keysym.sym == SDLK_ESCAPE) {
+				} else if(event.key.keysym.sym == SDLK_LCTRL || event.key.keysym.sym == SDLK_ESCAPE) {
 					prep_bg();
 					Quit = 1;
 				}
@@ -1112,9 +1112,9 @@ void gui_menu_main()
 					--sel.x;
 				} else if(event.key.keysym.sym == SDLK_RIGHT && sel.x < romlist.long_max - 53) {
 					++sel.x;
-				} else if(event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_LALT) {
+				} else if(event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_LCTRL) {
 					if(ss_prg_credit()) Quit = 1;
-				} else if(event.key.keysym.sym == SDLK_LCTRL){
+				} else if(event.key.keysym.sym == SDLK_LALT){
 					// executer l'emu
 					if(ROMLIST(etat, sel.rom) != ROUGE) {
 						ss_prog_run();
@@ -1124,7 +1124,7 @@ void gui_menu_main()
 						// simulate key unpress
 						// important
 						event.type = SDL_KEYUP;
-						event.key.keysym.sym = SDLK_LCTRL;
+						event.key.keysym.sym = SDLK_LALT;
 						SDL_PushEvent(&event);
 						compteur = 0;
 						continue;
