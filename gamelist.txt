@@ -1,6 +1,6 @@
 This list contains all games supported by FB Alpha.
 
-1446 games supported in total; X = excluded from build; D = included in debug build only; NW = not working
+1447 games supported in total; X = excluded from build; D = included in debug build only; NW = not working
 
   name		  status  full name						  parent	  year	  company	  hardware	  remarks
 +---------------+-------+-------------------------------------------------------+---------------+-------+---------------+---------------+---------------------------------------+
@@ -578,6 +578,7 @@ This list contains all games supported by FB Alpha.
 | mgcrystl	|  	| Magical Crystals (World, 92/01/10)			| 		| 1991	| Kaneko	| Kaneko 16-bit	| 					|
 | magdrop2	|  	| Magical Drop II					| 		| 1996	| Data East Corp| Neo Geo	| 					|
 | magdrop3	|  	| Magical Drop III					| 		| 1997	| Data East Corp| Neo Geo	| 					|
+| magdrop3bh	|  	| Magical Drop III (Secret Character Hack)		| magdrop3	| 1997	| hack		| Neo Geo	| 					|
 | maglord	|  	| Magician Lord (set 1)					| 		| 1990	| Alpha Denshi C| Neo Geo	| 					|
 | maglordh	|  	| Magician Lord (set 2)					| maglord	| 1990	| Alpha Denshi C| Neo Geo	| 					|
 | ttmahjng	|  	| Mahjong						| 		| 1980	| Taito		| Route 16	| 					|

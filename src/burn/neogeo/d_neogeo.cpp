@@ -5935,6 +5935,39 @@ struct BurnDriver BurnDrvkof97pls = {
 };
 
 
+// Magical Drop III (Secret Character Hack)
+// Enable all hidden characters - hack by GSC2007
+
+static struct BurnRomInfo magdrop3bhRomDesc[] = {
+	{ "233-p1bh.p1", 	0x100000, 0x80bfe2a9, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
+
+	{ "233-s1.s1",    	0x020000, 0x7399e68a, 2 | BRF_GRA },           //  1 Text layer tiles
+
+	{ "233-c1.c1",    	0x400000, 0x65e3f4c4, 3 | BRF_GRA },           //  2 Sprite data
+	{ "233-c2.c2",    	0x400000, 0x35dea6c9, 3 | BRF_GRA },           //  3
+	{ "233-c3.c3",    	0x400000, 0x0ba2c502, 3 | BRF_GRA },           //  4
+	{ "233-c4.c4",    	0x400000, 0x70dbbd6d, 3 | BRF_GRA },           //  5
+
+	{ "233-m1.m1",    	0x020000, 0x5beaf34e, 4 | BRF_ESS | BRF_PRG }, //  6 Z80 code
+
+	{ "233-v1.v1",    	0x400000, 0x58839298, 5 | BRF_SND },           //  7 Sound data
+	{ "233-v2.v2",    	0x080000, 0xd5e30df4, 5 | BRF_SND },           //  8
+};
+
+STDROMPICKEXT(magdrop3bh, magdrop3bh, neogeo)
+STD_ROM_FN(magdrop3bh)
+
+struct BurnDriver BurnDrvmagdrop3bh = {
+	"magdrop3bh", "magdrop3", "neogeo", "1997",
+	"Magical Drop III (Secret Character Hack)\0", NULL, "hack", "Neo Geo",
+	L"Magical Drop III\0\u30DE\u30B8\u30AB\u30EB\u30C9\u30ED\u30C3\u30D7III (Secret Character Hack)\0", NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_SNK_NEOGEO,
+	NULL, magdrop3bhRomInfo, magdrop3bhRomName, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, 0, NULL, NULL, NULL, &NeoRecalcPalette,
+	304, 224, 4, 3
+};
+
+
 // Magical Drop III
 
 static struct BurnRomInfo magdrop3RomDesc[] = {
