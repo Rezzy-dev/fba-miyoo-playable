@@ -337,6 +337,7 @@ vpath %.d 	$(foreach dir,$(alldir),$(objdir)$(dir)/ )
 #
 
 .PHONY: all init cleandep clean
+.NOTPARALLEL: init
 
 ifeq ($(MAKELEVEL),0)
 ifdef DEPEND
