@@ -81,9 +81,9 @@ alldir	=	burn \
 			generated \
 			sdl-dingux
 #cpu/nec
-incdir	= $(foreach dir,$(alldir),-I$(srcdir)$(dir)) -I$(objdir)generated -I$(srcdir) -I/opt/miyoo/arm-miyoo-linux-uclibcgnueabi/sysroot/usr/include -I/opt/miyoo/arm-miyoo-linux-uclibcgnueabi/sysroot/usr/include/SDL
+incdir	= $(foreach dir,$(alldir),-I$(srcdir)$(dir)) -I$(objdir)generated -I$(srcdir)
 
-lib = -lstdc++ -lSDL -lSDL_image -lz
+lib = -lstdc++
 
 ifdef USE_LIBAO
 	lib += -lao
@@ -254,19 +254,27 @@ alldep	= $(foreach file,$(autobj:.o=.c), \
 
 HOSTCC = gcc
 HOSTCXX = g++
-CC	= /opt/miyoo/bin/arm-miyoo-linux-uclibcgnueabi-gcc
-CXX	= /opt/miyoo/bin/arm-miyoo-linux-uclibcgnueabi-g++
-LD	= $(CXX)
-AS	= /opt/miyoo/bin/arm-miyoo-linux-uclibcgnueabi-as
-
 HOSTCFLAGS = $(incdir)
-CFLAGS   = -O2 -march=armv5te -mtune=arm926ej-s -pipe -fno-builtin -fno-common \
-		-fomit-frame-pointer -fexpensive-optimizations -Wno-write-strings -DLSB_FIRST
-CXXFLAGS = -O2 -march=armv5te -mtune=arm926ej-s -pipe -fno-builtin -fno-common \
-		-fomit-frame-pointer -fexpensive-optimizations -Wno-write-strings -DLSB_FIRST
 
+CHAINPREFIX ?= /opt/miyoo
+CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
+CC	= $(CROSS_COMPILE)gcc
+CXX	= $(CROSS_COMPILE)g++
+# `ld` fail with gcc platform cflags, use cc instead
+LD	= $(CC)
+AS	= $(CROSS_COMPILE)as
+
+PKG_CONFIG ?= $(CHAINPREFIX)/usr/bin/pkg-config
+PKGS = sdl SDL_image zlib
+PKGS_CFLAGS = $(shell $(PKG_CONFIG) --cflags $(PKGS))
+PKGS_LIBS = $(shell $(PKG_CONFIG) --libs $(PKGS))
+CFLAGS  = -O2 -pipe -fno-builtin -fno-common \
+		-fomit-frame-pointer -fexpensive-optimizations -Wno-write-strings -DLSB_FIRST
 CFLAGS += -D__cdecl="" -D__fastcall=""
-CXXFLAGS += -D__cdecl="" -D__fastcall=""
+CFLAGS += $(PKGS_CFLAGS)
+CXXFLAGS = $(CFLAGS)
+
+lib += $(PKGS_LIBS)
 
 ifdef USE_LIBAO
 	CFLAGS += -DUSE_LIBAO
