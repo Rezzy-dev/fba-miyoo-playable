@@ -31,10 +31,10 @@
 #define KEYPAD_RIGHT    0x0008
 #define KEYPAD_COIN     0x0010
 #define KEYPAD_START    0x0020
-#define KEYPAD_FIRE1    0x0040
-#define KEYPAD_FIRE2    0x0080
-#define KEYPAD_FIRE3    0x0100
-#define KEYPAD_FIRE4    0x0200
+#define KEYPAD_FIRE1    0x0080
+#define KEYPAD_FIRE2    0x0040
+#define KEYPAD_FIRE3    0x0200
+#define KEYPAD_FIRE4    0x0100
 #define KEYPAD_FIRE5    0x0400
 #define KEYPAD_FIRE6    0x0800
 
@@ -44,10 +44,10 @@
 #define BUTTON_RIGHT    0x0008
 #define BUTTON_SELECT   0x0010
 #define BUTTON_START    0x0020
-#define BUTTON_A        0x0040
-#define BUTTON_B        0x0080
-#define BUTTON_X        0x0100
-#define BUTTON_Y        0x0200
+#define BUTTON_A        0x0080
+#define BUTTON_B        0x0040
+#define BUTTON_X        0x0200
+#define BUTTON_Y        0x0100
 #define BUTTON_SL       0x0400
 #define BUTTON_SR       0x0800
 #define BUTTON_QT       0x1000
@@ -93,10 +93,10 @@ void sdl_input_read() // called from do_keypad()
 			else if (event.key.keysym.sym == keymap.start1) keypad &= ~KEYPAD_START;
 
 			// handheld keypresses
-			if (event.key.keysym.sym == SDLK_LCTRL) keypc &= ~BUTTON_A;
-			else if (event.key.keysym.sym == SDLK_LALT) keypc &= ~BUTTON_B;
-			else if (event.key.keysym.sym == SDLK_SPACE) keypc &= ~BUTTON_X;
-			else if (event.key.keysym.sym == SDLK_LSHIFT) keypc &= ~BUTTON_Y;
+			if (event.key.keysym.sym == SDLK_LALT) keypc &= ~BUTTON_A;
+			else if (event.key.keysym.sym == SDLK_LCTRL) keypc &= ~BUTTON_B;
+			else if (event.key.keysym.sym == SDLK_LSHIFT) keypc &= ~BUTTON_X;
+			else if (event.key.keysym.sym == SDLK_SPACE) keypc &= ~BUTTON_Y;
 			else if (event.key.keysym.sym == SDLK_TAB) keypc &= ~BUTTON_SL;
 			else if (event.key.keysym.sym == SDLK_BACKSPACE) keypc &= ~BUTTON_SR;
 			else if (event.key.keysym.sym == SDLK_ESCAPE) keypc &= ~BUTTON_SELECT;
@@ -122,10 +122,10 @@ void sdl_input_read() // called from do_keypad()
 			else if (event.key.keysym.sym == keymap.start1) keypad |= KEYPAD_START;
 
 			// handheld keypresses
-			if (event.key.keysym.sym == SDLK_LCTRL) keypc |= BUTTON_A;
-			else if (event.key.keysym.sym == SDLK_LALT) keypc |= BUTTON_B;
-			else if (event.key.keysym.sym == SDLK_SPACE) keypc |= BUTTON_X;
-			else if (event.key.keysym.sym == SDLK_LSHIFT) keypc |= BUTTON_Y;
+			if (event.key.keysym.sym == SDLK_LALT) keypc |= BUTTON_A;
+			else if (event.key.keysym.sym == SDLK_LCTRL) keypc |= BUTTON_B;
+			else if (event.key.keysym.sym == SDLK_LSHIFT) keypc |= BUTTON_X;
+			else if (event.key.keysym.sym == SDLK_SPACE) keypc |= BUTTON_Y;
 			else if (event.key.keysym.sym == SDLK_TAB) keypc |= BUTTON_SL;
 			else if (event.key.keysym.sym == SDLK_BACKSPACE) keypc |= BUTTON_SR;
 			else if (event.key.keysym.sym == SDLK_ESCAPE) keypc |= BUTTON_SELECT;

@@ -72,7 +72,7 @@ static void gui_reset();
 /* data definitions */
 char *gui_KeyNames[] = {"A", "B", "X", "Y", "L", "R"};
 int gui_KeyData[] = {0, 1, 2, 3, 4, 5};
-int gui_KeyValue[] = {SDLK_LCTRL, SDLK_LALT, SDLK_SPACE, SDLK_LSHIFT, SDLK_TAB, SDLK_BACKSPACE};
+int gui_KeyValue[] = {SDLK_LALT, SDLK_LCTRL, SDLK_LSHIFT, SDLK_SPACE, SDLK_TAB, SDLK_BACKSPACE};
 char *gui_SoundDrvNames[] = {"No sound", "LIBAO", "SDL mutex", "SDL"};
 char *gui_SoundSampleRates[] = {"11025", "16000", "22050", "32000", "44100"};
 
@@ -186,9 +186,9 @@ void ShowMenu(MENU *menu)
 	//ShowPreview(menu);
 
 	// print info string
-	DrawString("Press B to return to game", COLOR_HELP_TEXT, COLOR_BG, 56, 220);
-	DrawString("FinalBurn Alpha for OpenDingux", COLOR_HELP_TEXT, COLOR_BG, 44, 2);
-	DrawString("Based on FBA " VERSION " (c) Team FB Alpha", COLOR_HELP_TEXT, COLOR_BG, 0, 12);
+	//DrawString("Press B to return to game", COLOR_HELP_TEXT, COLOR_BG, 56, 220);
+	DrawString("FinalBurn Alpha (" VERSION ")", COLOR_HELP_TEXT, COLOR_BG, 52, 2);
+	DrawString("with QSound from FinalBurn Neo", COLOR_HELP_TEXT, COLOR_BG, 40, 12);
 }
 
 /*
@@ -207,9 +207,9 @@ void gui_MenuRun(MENU *menu)
 		while(SDL_PollEvent(&gui_event)) {
 			if(gui_event.type == SDL_KEYDOWN) {
 				// DINGOO A - apply parameter or enter submenu
-				if(gui_event.key.keysym.sym == SDLK_LCTRL) if(mi->itemOnA != NULL) (*mi->itemOnA)();
+				if(gui_event.key.keysym.sym == SDLK_LALT) if(mi->itemOnA != NULL) (*mi->itemOnA)();
 				// DINGOO B - exit or back to previous menu
-				if(gui_event.key.keysym.sym == SDLK_LALT) return;
+				if(gui_event.key.keysym.sym == SDLK_LCTRL) return;
 				// DINGOO UP - arrow down
 				if(gui_event.key.keysym.sym == SDLK_UP) if(--menu->itemCur < 0) menu->itemCur = menu->itemNum - 1;
 				// DINGOO DOWN - arrow up

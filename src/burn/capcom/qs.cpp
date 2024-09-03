@@ -39,8 +39,11 @@ int QsndInit()
 	nVolumeShift = 0;
 
 	// These games are too soft at normal volumes
+	if (strncmp(BurnDrvGetTextA(DRV_NAME), "punisher", 8) == 0) {
+		nVolumeShift = 2;
+	}
 	if (strncmp(BurnDrvGetTextA(DRV_NAME), "csclub", 6) == 0) {
-		nVolumeShift = -1;
+		nVolumeShift = 1;
 	}
 #if 0
 	// These games are loud at normal volumes (no clipping)
@@ -48,7 +51,7 @@ int QsndInit()
 		strcmp( BurnDrvGetTextA(DRV_NAME), "dimahoo"  ) == 0 ||
 		strcmp( BurnDrvGetTextA(DRV_NAME), "gmahoo"   ) == 0)
 	{
-		nVolumeShift = 1;
+		nVolumeShift = -1;
 	}
 #endif
 	// These games are too loud at normal volumes (no clipping)
@@ -59,13 +62,13 @@ int QsndInit()
 		strncmp(BurnDrvGetTextA(DRV_NAME), "sfa2",   4) == 0 ||
 		strncmp(BurnDrvGetTextA(DRV_NAME), "sfa2",   4) == 0)
 	{
-		nVolumeShift = 1;
+		nVolumeShift = -1;
 	}
 	// These games are too loud at normal volumes (clipping)
 	if (strncmp(BurnDrvGetTextA(DRV_NAME), "19xx",   4) == 0 ||
 		strncmp(BurnDrvGetTextA(DRV_NAME), "ddtod",  5) == 0)
 	{
-		nVolumeShift = 2;
+		nVolumeShift = -2;
 	}
 
 	QscInit(nRate, nVolumeShift);		// Init QSound chip
@@ -118,7 +121,7 @@ void QsndEndFrame()
 
 void QsndSyncZ80()
 {
-	int nCycles = (long long)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
+	int nCycles = (long long int)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
 
 	if (nCycles <= ZetTotalCycles()) {
 		return;

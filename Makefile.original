@@ -9,7 +9,7 @@
 #
 
 # Specify the name of the executable file, without ".exe"
-NAME = fba
+NAME = fbasdl
 
 # Check for changes in header files
 DEPEND = 1
@@ -21,8 +21,8 @@ DEPEND = 1
 PERL = 1
 
 # Choose emulation cores
-#BUILD_A68K = 1
-#BUILD_C68K = 1
+BUILD_A68K = 1
+BUILD_C68K = 1
 #BUILD_M68K = 1
 #USE_LIBAO = 1
 
@@ -49,9 +49,8 @@ endif
 #	Specify paths/files
 #
 
-objdir	= obj/dingux/
+objdir	= obj/mingw/
 srcdir	= src/
-assemdir = src/
 
 alldir	=	burn \
 			burn/capcom \
@@ -68,22 +67,25 @@ alldir	=	burn \
 			burn/sega \
 			burn/taito \
 			burn/toaplan \
+			cpu/a68k \
 			cpu/c68k \
 			cpu/cz80 \
-			cpu/drz80 \
-			cpu/cyclone \
-			cpu/armnec \
 			cpu/i8039 \
 			cpu/m68k \
 			cpu/m6502 \
+			cpu/nec \
 			cpu/sh2 \
 			cpu/z80 \
 			generated \
 			sdl-dingux
-#cpu/nec
-incdir	= $(foreach dir,$(alldir),-I$(srcdir)$(dir)) -I$(objdir)generated -I$(srcdir) -I/opt/miyoo/arm-miyoo-linux-uclibcgnueabi/sysroot/usr/include -I/opt/miyoo/arm-miyoo-linux-uclibcgnueabi/sysroot/usr/include/SDL
 
+incdir	= $(foreach dir,$(alldir),-I$(srcdir)$(dir)) -I$(objdir)generated -I$(srcdir) -I/local/include -I/local/include/SDL
+
+ifeq ($(OS),Windows_NT)
+lib = -static -lstdc++ -lmingw32 -Wl,-Bdynamic -lSDL -lSDL_image -lz
+else
 lib = -lstdc++ -lSDL -lSDL_image -lz
+endif
 
 ifdef USE_LIBAO
 	lib += -lao
@@ -157,7 +159,7 @@ depobj	+=	\
 		dac.o ics2115.o msm5205.o msm6295.o rf5c68.o segapcm.o sn76496.o upd7759.o ymf278b.o ymz280b.o \
 		x1010.o \
 		\
-		i8039.o m6502.o m6502_intf.o sh2.o z80.o z80daisy.o cz80.o \
+		i8039.o m6502.o m6502_intf.o nec.o sh2.o z80.o z80daisy.o cz80.o \
 		\
 		cave.o cave_tile.o cave_sprite.o cave_palette.o \
 		\
@@ -192,7 +194,6 @@ depobj	+=	\
 		#\
 		#dec_aud.o dec_misc.o dec_vid.o \
 
-		#i8039.o m6502.o m6502_intf.o nec.o sh2.o z80.o z80daisy.o cz80.o \
 
 autobj += $(depobj)
 
@@ -227,17 +228,13 @@ allobj += \
 	  $(foreach file,$(autobj:.o=.cpp), \
 		$(foreach dir,$(alldir),$(subst $(srcdir),$(objdir), \
 		$(firstword $(subst .cpp,.o,$(wildcard $(srcdir)$(dir)/$(file))))))) \
-	  $(foreach file,$(autobj:.o=.s), \
+	  $(foreach file,$(autobj:.o=.asm), \
 		$(foreach dir,$(alldir),$(subst $(srcdir),$(objdir), \
-		$(firstword $(subst .s,.o,$(wildcard $(srcdir)$(dir)/$(file)))))))
+		$(firstword $(subst .asm,.o,$(wildcard $(srcdir)$(dir)/$(file)))))))
 
 ifdef BUILD_A68K
 allobj += $(a68k.o)
 endif
-allobj += $(assemdir)cpu/drz80/DrZ80.o
-allobj += $(assemdir)cpu/cyclone/cyclone.o
-allobj += $(assemdir)cpu/armnec/armV33.o
-allobj += $(assemdir)cpu/armnec/armV30.o
 
 alldep	= $(foreach file,$(autobj:.o=.c), \
 		$(foreach dir,$(alldir),$(subst $(srcdir),$(objdir), \
@@ -254,19 +251,21 @@ alldep	= $(foreach file,$(autobj:.o=.c), \
 
 HOSTCC = gcc
 HOSTCXX = g++
-CC	= /opt/miyoo/bin/arm-miyoo-linux-uclibcgnueabi-gcc
-CXX	= /opt/miyoo/bin/arm-miyoo-linux-uclibcgnueabi-g++
+CC	= gcc
+CXX	= g++
 LD	= $(CXX)
-AS	= /opt/miyoo/bin/arm-miyoo-linux-uclibcgnueabi-as
+AS	= nasm
 
 HOSTCFLAGS = $(incdir)
-CFLAGS   = -O2 -march=armv5te -mtune=arm926ej-s -pipe -fno-builtin -fno-common \
-		-fomit-frame-pointer -fexpensive-optimizations -Wno-write-strings -DLSB_FIRST
-CXXFLAGS = -O2 -march=armv5te -mtune=arm926ej-s -pipe -fno-builtin -fno-common \
-		-fomit-frame-pointer -fexpensive-optimizations -Wno-write-strings -DLSB_FIRST
+CFLAGS   = -O2 -fomit-frame-pointer -Wno-write-strings \
+		-DLSB_FIRST
+CXXFLAGS = -O2 -fomit-frame-pointer -Wno-write-strings \
+		-DLSB_FIRST
 
+ifneq ($(OS),Windows_NT)
 CFLAGS += -D__cdecl="" -D__fastcall=""
 CXXFLAGS += -D__cdecl="" -D__fastcall=""
+endif
 
 ifdef USE_LIBAO
 	CFLAGS += -DUSE_LIBAO
@@ -316,13 +315,19 @@ CXXFLAGS += $(DEF) $(incdir)
 LDFLAGS += 
 ASFLAGS = -O1
 
+ifeq ($(OS),Windows_NT)
+ASFLAGS += -f coff
+else
+ASFLAGS += -f elf
+endif
+
 #
 #
 #	Specify paths
 #
 #
 
-vpath %.s	$(foreach dir,$(alldir),$(srcdir)$(dir)/ )
+vpath %.asm	$(foreach dir,$(alldir),$(srcdir)$(dir)/ )
 vpath %.cpp	$(foreach dir,$(alldir),$(srcdir)$(dir)/ )
 vpath %.c	$(foreach dir,$(alldir),$(srcdir)$(dir)/ )
 vpath %.h	$(foreach dir,$(alldir),$(srcdir)$(dir)/ )
@@ -402,10 +407,10 @@ $(a68k.o):	fba_make68k.c
 	@echo Compiling A68K MC68000 core...
 	@$(HOSTCC) $(HOSTCFLAGS) $(LDFLAGS) -DWIN32 -Wno-unused -Wno-conversion -Wno-missing-prototypes \
 		-s $< -o $(objdir)generated/fba_make68k
-	@$(objdir)generated/fba_make68k $(@:.o=.s) $(@D)/a68ktbl.inc
+	@$(objdir)generated/fba_make68k $(@:.o=.asm) \
+		$(@D)/a68k_tab.asm 00 $(ppro)
 	@echo Assembling A68K MC68000 core...
-	@$(CC) $(CFLAGS) -c -o $@ $(@:.o=.s)
-	#@$(AS) $(ASFLAGS) $(@:.o=.s) -o $@
+	@$(AS) $(ASFLAGS) $(@:.o=.asm) -o $@
 endif
 
 # Musashi
@@ -528,10 +533,9 @@ ifeq ($(MAKELEVEL),0)
 	@echo Compiling $<...
 	@$(CC) $(CFLAGS) -Wno-unused -Wno-conversion -Wno-missing-prototypes -c $< -o $(subst $(srcdir),$(objdir),$(<D))/$(@F)
 
-%.o:	%.s
+%.o:	%.asm
 	@echo Assembling $<...
-	#@$(AS) $(ASFLAGS) $< -o $(subst $(srcdir),$(objdir),$(<D))/$(@F)
-	@$(CC) $(CFLAGS) -c -o $(subst $(srcdir),$(objdir),$(<D))/$(@F) $<
+	@$(AS) $(ASFLAGS) $< -o $(subst $(srcdir),$(objdir),$(<D))/$(@F)
 
 else
 
@@ -539,10 +543,9 @@ else
 	@echo Compiling $<...
 	@$(CC) $(CFLAGS) -Wno-unused -Wno-conversion -Wno-missing-prototypes -c $< -o $@
 
-%.o:	%.s
+%.o:	%.asm
 	@echo Assembling $<...
-	#$(AS) $(ASFLAGS) $< -o $@
-	@$(CC) $(CFLAGS) -c -o $@ $<
+	@$(AS) $(ASFLAGS) $< -o $@
 
 %.o:
 	@echo Compiling $<...
@@ -563,10 +566,6 @@ ifdef DEPEND
 %.d:	%.cpp
 	@echo Generating depend file for $<...
 	@$(CXX) -MM -MT "$(subst $(srcdir),$(objdir),$(<D))/$(*F).o $(subst $(srcdir),$(objdir),$(<D))/$(@F)" -x c++ $(CXXFLAGS) $< >$(subst $(srcdir),$(objdir),$(<D))/$(@F)
-
-%.d:	%.s
-	@echo Generating depend file for $<...
-	@$(CC) -MM -MT "$(subst $(srcdir),$(objdir),$(<D))/$(*F).o $(subst $(srcdir),$(objdir),$(<D))/$(@F)" -x c++ $(CFLAGS) $< >$(subst $(srcdir),$(objdir),$(<D))/$(@F)
 
 endif
 
