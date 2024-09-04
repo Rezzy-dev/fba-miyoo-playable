@@ -43,6 +43,7 @@ static int StateInfo(int* pnLen, int* pnMinVer, int bAll)
 static int __cdecl ReadAcb(struct BurnArea* pba)
 {
 	fread(pba->Data, 1, pba->nLen, bfp);
+	return 0;
 }
 
 // State load
@@ -198,6 +199,7 @@ static int __cdecl WriteAcb(struct BurnArea *pba)
 	//printf("WRITE ACB - len: %i, name: %s\n", pba->nLen, pba->szName);
 	fwrite(pba->Data, 1, pba->nLen, bfp);
 	nTotalLen += pba->nLen;
+	return 0;
 }
 
 // Write a savestate as a chunk of an "FBS " file

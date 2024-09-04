@@ -94,6 +94,7 @@ int ProgressCreate()
 	//DrawString("Based on FinalBurnAlpha", (uint16 *)load_screen->pixels, 10, 35, fwidth);
 	DrawString("Now loading ...", (uint16 *)load_screen->pixels, 10, 105, fwidth);
 	show_rom_loading_text("Reading ROM", 0, 0);
+	return 0;
 }
 
 int ProgressDestroy()
@@ -102,6 +103,7 @@ int ProgressDestroy()
 		SDL_FreeSurface(load_screen);
 		load_screen = NULL;
 	}
+	return 0;
 }
 
 int ProgressUpdateBurner(double dProgress, const TCHAR* pszText, bool bAbs)

@@ -512,17 +512,17 @@ int ZetPc(int n)
 
 int ZetBc(int n)
 {
-
+    return 0;
 }
 
 int ZetDe(int n)
 {
-
+    return 0;
 }
 
 int ZetHL(int n)
 {
-
+    return 0;
 }
 
 int ZetScan(int nAction)
@@ -571,7 +571,7 @@ int ZetNmi()
 int ZetIdle(int nCycles)
 {
     Drz80.nCyclesTotal += nCycles;
-
+    return 0;
 }
 
 int ZetSegmentCycles()
