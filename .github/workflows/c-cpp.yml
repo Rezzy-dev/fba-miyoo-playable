@@ -5,15 +5,15 @@ on: [push, pull_request]
 
 jobs:   
   build-modern:
-    name: FBA for MiyooCFW (uClibc)
-    runs-on: ubuntu-20.04
+    name: FBA for MiyooCFW (musl)
+    runs-on: ubuntu-22.04
     container:
-      image: nfriedly/miyoo-toolchain:steward
+      image: miyoocfw/toolchain-static-musl:master
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: build
-      run: make -f Makefile
-    - uses: actions/upload-artifact@v3
+      run: make -j$(nproc)
+    - uses: actions/upload-artifact@v4
       with:
         name: FBA binary
         path: bin/fba
