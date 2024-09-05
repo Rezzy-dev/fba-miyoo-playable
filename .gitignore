@@ -11,3 +11,6 @@ obj
 *~.txt
 src/generated/*
 gamelist.txt
+bin/fba
+fba*.ipk
+fba*.zip

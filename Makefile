@@ -594,6 +594,9 @@ endif
 	@mkdir -p $(foreach dir, $(alldir),$(objdir)$(dir))
 	@mkdir -p $(srcdir)generated
 
+ipk: all
+	gm2xpkg -c -i pkg.cfg
+
 cleandep:
 	@echo Removing depend files from $(objdir)...
 	@for dir in $(alldir); do rm -f $(objdir)$$dir/*.d; done
