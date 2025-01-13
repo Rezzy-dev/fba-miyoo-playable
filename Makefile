@@ -595,7 +595,8 @@ endif
 	@mkdir -p $(srcdir)generated
 
 ipk: all
-	gm2xpkg -c -i pkg.cfg
+	@cp dist/* bin/
+	gm2xpkg -c -i -f pkg.cfg
 
 cleandep:
 	@echo Removing depend files from $(objdir)...

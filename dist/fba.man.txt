@@ -1,0 +1,82 @@
+Final Burn Alpha for the MiyooCFW
+----
+
+FB Alpha is an arcade emulator supporting the following hardware platforms;
+
+ - Capcom CPS-1
+ - Capcom CPS-2
+ - Cave
+ - Neo Geo
+ - Sega System 16 (and similar), System 18, X-Board, Y-Board
+ - Toaplan
+ - Taito Rainbow Islands/Operation Wolf/Rastan
+ - Psikyo 68EC020 based hardware
+ - misc stuff we like
+
+Controls
+----
+
+D-PAD           D-PAD
+SELECT          Coin1
+START           Start1
+A               Fire1
+B               Fire2
+X               Fire3
+Y               Fire4
+L               Fire5
+R               Fire6
+
+Hotkeys
+----
+HOME            Emulator menu
+Select + X      Service menu
+Select + Y      Show/hide FPS
+Select + B      Player 2 start
+Select + L      Quick load state
+Select + R      Quick save state
+
+All fire keys could be redefined in the menu.
+
+
+Supported games
+----
+
+Refer to gamelist.txt for the list of supported roms
+
+
+Version
+----
+
+Based on FBA 0.2.96.86 - Romset is synchronized with MAME 0.126
+
+
+How to use FB Alpha
+----
+
+FBA SDL is now merged with the frontend based on Capex in one application. Just
+run it, press START and choose Rom Show mode: all, available or non-available.
+If needed, supplementary rom paths could be set.
+
+FBA SDL could be used as a standalone application when invoked with
+rom zip with full path as a parameter:
+
+./fba /mnt/roms/FBA/dino.zip
+
+Full path and extension are obligatory.
+
+Source code
+----
+
+https://github.com/Rezzy-dev/fba-miyoo-playable
+https://github.com/pinglfood/fba-a320
+https://github.com/dmitrysmagin/fba-a320
+https://github.com/dmitrysmagin/fba-sdl
+
+FB Alpha is written by FB Alpha Team
+
+Acknowledgements
+----
+
+Thanks to: Dave, ElSemi, Gangta, OG, Razoola, Logiqx, TRAC, CrashTest,
+           Andrea Mazzoleni, Derek Liauw Kie Fa, Dirk Stevens, Maxim Stepin,
+           the MAME team, Shawn and Craig at XGaming, littlehui, Rezzy-dev.

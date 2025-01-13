@@ -12,9 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: build
-      run: make -j$(nproc)
+      run: make -j$(nproc) && make ipk
     - uses: actions/upload-artifact@v4
       with:
         name: FBA binary
         path: bin/fba
+        if-no-files-found: error # 'error', 'warn', 'ignore'; defaults to `warn`
+    - uses: actions/upload-artifact@v4
+      with:
+        name: FBA package (IPK)
+        path: fba.ipk
         if-no-files-found: error # 'error', 'warn', 'ignore'; defaults to `warn`
