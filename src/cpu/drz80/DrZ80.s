@@ -290,6 +290,8 @@ write16_end_\jpname:
 
 .macro PUSH_r0 dec_sp
      sub z80sp,z80sp,#\dec_sp
+     bic z80sp,#0xFF000000
+     bic z80sp,#0xFF0000
 
      ldr r2,[cpucontext,#ppMemWrite]
      mov r1,z80sp,lsr#8						
