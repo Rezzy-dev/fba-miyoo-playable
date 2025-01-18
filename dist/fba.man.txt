@@ -28,12 +28,14 @@ R               Fire6
 
 Hotkeys
 ----
-HOME            Emulator menu
-Select + X      Service menu
-Select + Y      Show/hide FPS
-Select + B      Player 2 start
-Select + L      Quick load state
-Select + R      Quick save state
+L1 + R1 + START (HOME)    Emulator menu
+L1 + R1 + SELECT          Service menu
+L1 + R1 + Y               Show/hide FPS
+Select + START            Player 2 start
+L1 + R1 + B (L2)          Quick save state
+L1 + R1 + A (R2)          Quick load state
+L3                        Pause game/emulator
+R3                        Exit game/emulator
 
 All fire keys could be redefined in the menu.
 
