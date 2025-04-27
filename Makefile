@@ -20,6 +20,9 @@ DEPEND = 1
 # Perl is available
 PERL = 1
 
+# Profile Guided Optimization : 0, YES, APPLY
+PROFILE ?= 0
+
 # Choose emulation cores
 #BUILD_A68K = 1
 #BUILD_C68K = 1
@@ -272,9 +275,20 @@ CFLAGS  = -O2 -pipe -fno-builtin -fno-common \
 		-fomit-frame-pointer -fexpensive-optimizations -Wno-write-strings -DLSB_FIRST
 CFLAGS += -D__cdecl="" -D__fastcall=""
 CFLAGS += $(PKGS_CFLAGS)
+
+ifeq ($(PROFILE), YES)
+CFLAGS += -fprofile-generate=/mnt/profile
+else ifeq ($(PROFILE), APPLY)
+CFLAGS += -fprofile-use=profile -fbranch-probabilities
+endif
+
 CXXFLAGS = $(CFLAGS)
 
 lib += $(PKGS_LIBS)
+
+ifeq ($(PROFILE), YES)
+lib += -lgcov
+endif
 
 ifdef USE_LIBAO
 	CFLAGS += -DUSE_LIBAO
@@ -306,11 +320,11 @@ endif
 
 DEF += -DFILENAME=$(NAME)
 
-ifdef PROFILE
-	CFLAGS	+= -pg
-else
-	LDFLAGS	=
-endif
+#ifdef PROFILE
+#	CFLAGS	+= -pg
+#else
+#	LDFLAGS	=
+#endif
 
 ifdef DEBUG
 	CFLAGS		+= -g
