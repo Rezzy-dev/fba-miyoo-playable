@@ -244,21 +244,6 @@ void QscNewFrame();
 void QscWrite(int a, int d);
 int QscUpdate(int nEnd);
 
-// Sound outputs
-#define BURN_SND_QSND_OUTPUT_1			0
-#define BURN_SND_QSND_OUTPUT_2			1
-
-// Sound clipping macro
-#define BURN_SND_CLIP(A) ((A) < -0x8000 ? -0x8000 : (A) > 0x7fff ? 0x7fff : (A))
-
-// Sound routes
-#define BURN_SND_ROUTE_LEFT			1
-#define BURN_SND_ROUTE_RIGHT		2
-#define BURN_SND_ROUTE_BOTH			(BURN_SND_ROUTE_LEFT | BURN_SND_ROUTE_RIGHT)
-
-// Macro to determine the size of a struct up to and including "member"
-#define STRUCT_SIZE_HELPER(type, member) offsetof(type, member) + sizeof(((type*)0)->member)
-
 // cps_tile.cpp
 extern unsigned int* CpstPal;
 extern unsigned int nCpstType; extern int nCpstX,nCpstY;
