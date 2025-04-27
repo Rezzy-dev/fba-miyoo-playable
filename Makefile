@@ -330,6 +330,8 @@ ifdef DEBUG
 	CFLAGS		+= -g
 	CXXFLAGS	+= -g
 else
+	CFLAGS		+= -flto
+	CXXFLAGS	+= -flto
 	LDFLAGS		+= -s
 endif
 
