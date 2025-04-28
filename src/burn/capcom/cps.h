@@ -25,9 +25,8 @@ extern UINT8 *CpsGfx;  extern UINT32 nCpsGfxLen;		// All the graphics
 extern UINT8 *CpsRom;  extern UINT32 nCpsRomLen;		// Program Rom (as in rom)
 extern UINT8 *CpsCode; extern UINT32 nCpsCodeLen;		// Program Rom (decrypted)
 extern UINT8 *CpsZRom; extern UINT32 nCpsZRomLen;		// Z80 Roms
-extern  INT8 *CpsQSam; extern UINT32 nCpsQSamLen;		// QSound Sample Roms
-extern UINT8 *CpsAd;   extern UINT32 nCpsAdLen;		    // ADPCM Data
-extern UINT8 *CpsKey; extern UINT32 nCpsKeyLen;
+extern          INT8 *CpsQSam; extern UINT32 nCpsQSamLen;		// QSound Sample Roms
+extern UINT8 *CpsAd;   extern UINT32 nCpsAdLen;		// ADPCM Data
 extern UINT32 nCpsGfxScroll[4];								// Offset to Scroll tiles
 extern UINT32 nCpsGfxMask;									// Address mask
 extern UINT8* CpsStar;
@@ -37,7 +36,6 @@ INT32 CpsExit();
 INT32 CpsLoadTiles(UINT8 *Tile,INT32 nStart);
 INT32 CpsLoadTilesByte(UINT8 *Tile,INT32 nStart);
 INT32 CpsLoadTilesForgottn(INT32 nStart);
-INT32 CpsLoadTilesForgottna(INT32 nStart);
 INT32 CpsLoadTilesForgottnu(INT32 nStart);
 INT32 CpsLoadTilesPang(UINT8 *Tile,INT32 nStart);
 INT32 CpsLoadTilesSf2ebbl(UINT8 *Tile, INT32 nStart);
@@ -62,10 +60,6 @@ INT32 CpsLoadTilesSlampic(INT32 nStart);
 INT32 CpsLoadTilesKodb(INT32 nStart);
 INT32 CpsLoadTilesWonder3b(INT32 nStart);
 INT32 CpsLoadTilesPang3r1a(INT32 nStart);
-INT32 CpsLoadTilesPunisherb(INT32 nStart);
-INT32 CpsLoadTilesKnightsb2(INT32 nStart);
-INT32 CpsLoadTilesMtwinsb(INT32 nStart);
-INT32 CpsLoadTilesWofabl(INT32 nStart);
 INT32 CpsLoadStars(UINT8 *pStar, INT32 nStart);
 INT32 CpsLoadStarsByte(UINT8 *pStar, INT32 nStart);
 INT32 CpsLoadStarsForgottnAlt(UINT8 *pStar, INT32 nStart);
@@ -153,10 +147,8 @@ INT32 Cps2LoadTilesGigaman2(UINT8 *Tile, UINT8 *pSrc);
 #define mapper_PKB10B		37
 #define mapper_pang3		38
 #define mapper_sfzch		39
-#define mapper_cps2			40
-#define mapper_frog			41
-#define mapper_pokon		42
-#define mapper_KNM10B		43
+#define mapper_cps2		40
+#define mapper_frog		41
 extern void SetGfxMapper(INT32 MapperId);
 extern INT32 GfxRomBankMapper(INT32 Type, INT32 Code);
 extern void SetCpsBId(INT32 CpsBId, INT32 bStars);
@@ -187,9 +179,7 @@ extern CpsMemScanCallback CpsMemScanCallbackFunction;
 
 // cps_run.cpp
 extern UINT8 CpsReset;
-extern INT32 nCpsCyclesExtra;
 extern UINT8 Cpi01A, Cpi01C, Cpi01E;
-extern UINT8 fFakeDip;
 extern INT32 nIrqLine50, nIrqLine52;								// The scanlines at which the interrupts are triggered
 extern INT32 nCpsNumScanlines;
 extern INT32 Cps1VBlankIRQLine;
@@ -251,7 +241,6 @@ CPSINPEX
 // For the Forgotten Worlds analog controls
 extern UINT16 CpsInp055, CpsInp05d;
 extern UINT16 CpsInpPaddle1, CpsInpPaddle2;
-extern UINT8 CpsDigUD[4];
 
 extern INT32 PangEEP;
 extern INT32 Forgottn;
@@ -261,8 +250,6 @@ extern INT32 Cawingb;
 extern INT32 Wofh;
 extern INT32 Sf2thndr;
 extern INT32 Pzloop2;
-extern INT32 Mmatrix;
-extern INT32 Sfa2ObjHack;
 extern INT32 Ssf2tb;
 extern INT32 Dinohunt;
 extern INT32 Port6SoundWrite;
@@ -446,12 +433,12 @@ INT32 PsndInit();
 INT32 PsndExit();
 void PsndNewFrame();
 INT32 PsndSyncZ80(INT32 nCycles);
-INT32 PsndScan(INT32 nAction, INT32 *pnMin);
+INT32 PsndScan(INT32 nAction);
 
 // ps_z.cpp
 INT32 PsndZInit();
 INT32 PsndZExit();
-INT32 PsndZScan(INT32 nAction, INT32 *pnMin);
+INT32 PsndZScan(INT32 nAction);
 extern INT32 Kodb;
 
 // ps_m.cpp
@@ -501,7 +488,6 @@ INT32 Sf2mdtScanSound(INT32 nAction, INT32 *pnMin);
 #define CPS2_QSND							12
 #define CPS2_QSND_SIMM						13
 #define CPS2_QSND_SIMM_BYTESWAP				14
-#define CPS2_ENCRYPTION_KEY					15
 
 extern INT32 Cps2Volume;
 extern UINT16 Cps2VolumeStates[40];

@@ -1,23 +1,24 @@
 // QSound - emulator for the QSound Chip
 
 #include <math.h>
-#include <stddef.h>
 #include "cps.h"
+#include "burn_sound.h"
 
 static const INT32 nQscClock = 4000000;
 static const INT32 nQscClockDivider = 166;
 
 static INT32 nQscRate = 0;
-INT32 Mmatrix; // global
 
 static INT32 Tams = -1;
 static INT32* Qs_s = NULL;
 
 static INT32 nPos;
 
-struct QChan_s {
+struct QChan {
 		UINT8 bKey;				// 1 if channel is playing
 		INT8 nBank;						// Bank we are currently playing a sample from
+
+		INT8* PlayBank;					// Pointer to current bank
 
 		INT32 nPlayStart;					// Start of being played
 		INT32 nStart;						// Start of sample 16.12
@@ -32,18 +33,16 @@ struct QChan_s {
 		INT32 nPitch;						// Playback frequency
 
 		INT8 nEndBuffer[8];				// Buffer to enable correct cubic interpolation
-
-		INT8* PlayBank;		// Pointer to current bank
 };
 
-static struct QChan_s QChan[16];
+static struct QChan QChan[16];
 
 static INT32 PanningVolumes[33];
 
 static double QsndGain[2];
 static INT32 QsndOutputDir[2];
 
-static void MapBank(struct QChan_s* pc)
+static void MapBank(struct QChan* pc)
 {
 	UINT32 nBank;
 
@@ -57,7 +56,7 @@ static void MapBank(struct QChan_s* pc)
 	pc->PlayBank = (INT8*)CpsQSam + nBank;
 }
 
-static void UpdateEndBuffer(struct QChan_s* pc)
+static void UpdateEndBuffer(struct QChan* pc)
 {
 	if (pc->bKey) {
 		// prepare a buffer to correctly interpolate the last 4 samples
@@ -82,7 +81,7 @@ static void UpdateEndBuffer(struct QChan_s* pc)
 	}
 }
 
-static void CalcAdvance(struct QChan_s* pc)
+static void CalcAdvance(struct QChan* pc)
 {
 	if (nQscRate) {
 		pc->nAdvance = (INT64)pc->nPitch * nQscClock / nQscClockDivider / nQscRate;
@@ -133,18 +132,7 @@ void QscSetRoute(INT32 nIndex, double nVolume, INT32 nRouteDir)
 
 INT32 QscScan(INT32 nAction)
 {
-	for (INT32 i = 0; i < 16; i++) {
-		struct BurnArea ba;
-		char szName[16];
-
-		sprintf(szName, "QChan #%d", i);
-
-		ba.Data		= &QChan[i];
-		ba.nLen		= STRUCT_SIZE_HELPER(struct QChan_s, nEndBuffer);
-		ba.nAddress = 0;
-		ba.szName	= szName;
-		BurnAcb(&ba);
-	}
+	SCAN_VAR(QChan);
 
 	if (nAction & ACB_WRITE) {
 		// Update bank pointers with new banks, and recalc nAdvance
@@ -169,7 +157,7 @@ static inline void QscSyncQsnd()
 
 void QscWrite(INT32 a, INT32 d)
 {
-	struct QChan_s* pc;
+	struct QChan* pc;
 	INT32 nChanNum, r;
 
 	// unknown
@@ -191,11 +179,7 @@ void QscWrite(INT32 a, INT32 d)
 			nPan = 0x20;
 		}
 
-		//bprintf(PRINT_NORMAL, _T("QSound: ch#%i pan -> 0x%X\n"), nChanNum, nPan);
-
-		if (Mmatrix && nPan == 0x00) {
-			nPan = 0x10; // Fixes all sfx that are hard-panned to the right. (Mars Matrix only)
-		}
+//		bprintf(PRINT_NORMAL, "QSound: ch#%i pan -> 0x%04X\n", nChanNum, d);
 
 		pc->nVolume[0] = PanningVolumes[0x20 - nPan];
 		pc->nVolume[1] = PanningVolumes[0x00 + nPan];
