@@ -84,7 +84,7 @@ static void UpdateEndBuffer(struct QChan* pc)
 static void CalcAdvance(struct QChan* pc)
 {
 	if (nQscRate) {
-		pc->nAdvance = (INT64)pc->nPitch * nQscClock / nQscClockDivider / nQscRate;
+		pc->nAdvance = (long long)pc->nPitch * nQscClock / nQscClockDivider / nQscRate;
 	}
 }
 
@@ -102,7 +102,7 @@ void QscExit()
 {
 	nQscRate = 0;
 
-	BurnFree(Qs_s);
+	free(Qs_s);
 	Tams = -1;
 }
 
@@ -272,9 +272,9 @@ INT32 QscUpdate(INT32 nEnd)
 	}
 
 	if (Tams < nLen) {
-		BurnFree(Qs_s);
+		free(Qs_s);
 		Tams = nLen;
-		Qs_s = (INT32*)BurnMalloc(sizeof(INT32) * 2 * Tams);
+		Qs_s = (INT32*)malloc(sizeof(INT32) * 2 * Tams);
 	}
 
 	memset(Qs_s, 0, nLen * 2 * sizeof(INT32));

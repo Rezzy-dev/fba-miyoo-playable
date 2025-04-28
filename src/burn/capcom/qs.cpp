@@ -6,7 +6,7 @@ static INT32 nQsndCyclesExtra;
 static INT32 qsndTimerOver(INT32, INT32)
 {
 //	bprintf(PRINT_NORMAL, _T("  - IRQ -> 1.\n"));
-	ZetSetIRQLine(0xFF, CPU_IRQSTATUS_AUTO);
+	ZetSetIRQLine(0xFF, ZET_IRQSTATUS_AUTO);
 
 	return 0;
 }
@@ -92,7 +92,7 @@ void QsndEndFrame()
 
 void QsndSyncZ80()
 {
-	int nCycles = (INT64)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
+	int nCycles = (long long)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
 
 	if (nCycles <= ZetTotalCycles()) {
 		return;
