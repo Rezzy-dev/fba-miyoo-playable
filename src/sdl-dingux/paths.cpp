@@ -12,7 +12,7 @@ char szAppConfigPath[MAX_PATH] = "./.fba/configs";	// ~/.fba/configs
 char szAppHiscorePath[MAX_PATH] = "./.fba/hiscore";	// ~/.fba/highscore // for burn/hiscore.cpp
 char szAppSamplesPath[MAX_PATH] = "./.fba/samples";	// ~/.fba/samples // for burn/snd/samples.cpp
 char szAppPreviewPath[MAX_PATH] = "./.fba/previews";	// ~/.fba/previews
-char szAppRomPaths[DIRS_MAX][MAX_PATH] = {{"./"}, {"/usr/local/share/roms/"}, {"roms/"}, };
+char szAppRomPaths[DIRS_MAX][MAX_PATH] = {{"./"}, {"/usr/local/share/roms/"}, {"roms/"}, {"/roms/FBA/"}, };
 
 void BurnPathsInit()
 {
