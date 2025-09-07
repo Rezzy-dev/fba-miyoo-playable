@@ -2,12 +2,19 @@
 
 ROMSETs via MAME 0.126
 
-### Cross-Compile build (MiyooCFW):
+### Cross-Compile (MiyooCFW):
+
+- compile binary:
 ```
 make -j$(nproc)
 ```
+- or create IPK package:
+```
+make -j$(nproc) ipk
+```
 
 ### Native build (linux):
+
 ```
 no instructions yet
 ```
