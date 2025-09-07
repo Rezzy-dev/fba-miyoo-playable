@@ -188,7 +188,9 @@ void ShowMenu(MENU *menu)
 	// print info string
 	//DrawString("Press B to return to game", COLOR_HELP_TEXT, COLOR_BG, 56, 220);
 	DrawString("FinalBurn Alpha (" VERSION ")", COLOR_HELP_TEXT, COLOR_BG, 52, 2);
+#ifdef USE_QSOUND_FBNEO
 	DrawString("with QSound from FinalBurn Neo", COLOR_HELP_TEXT, COLOR_BG, 40, 12);
+#endif
 }
 
 /*
