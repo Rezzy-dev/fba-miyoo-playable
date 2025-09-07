@@ -5,10 +5,10 @@ on: [push, pull_request]
 
 jobs:   
   build-modern:
-    name: FBA for MiyooCFW (musl)
+    name: FBA for MiyooCFW (uclibc)
     runs-on: ubuntu-22.04
     container:
-      image: miyoocfw/toolchain-static-musl:master
+      image: miyoocfw/toolchain-static-uclibc:master
     steps:
     - uses: actions/checkout@v4
     - name: build
