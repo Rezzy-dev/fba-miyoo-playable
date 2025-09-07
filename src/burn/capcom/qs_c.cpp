@@ -106,7 +106,7 @@ void QscExit()
 	Tams = -1;
 }
 
-INT32 QscInit(INT32 nRate)
+int QscInit(int nRate, int nVolumeShift)
 {
 	nQscRate = nRate;
 

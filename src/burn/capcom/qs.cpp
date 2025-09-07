@@ -1,9 +1,9 @@
 #include "cps.h"
 // QSound
 
-static INT32 nQsndCyclesExtra;
+static int nQsndCyclesExtra;
 
-static INT32 qsndTimerOver(INT32, INT32)
+static int qsndTimerOver(int, int)
 {
 //	bprintf(PRINT_NORMAL, _T("  - IRQ -> 1.\n"));
 	ZetSetIRQLine(0xFF, ZET_IRQSTATUS_AUTO);
@@ -11,9 +11,10 @@ static INT32 qsndTimerOver(INT32, INT32)
 	return 0;
 }
 
-INT32 QsndInit()
+int QsndInit()
 {
-	INT32 nRate;
+	int nVolumeShift;
+	int nRate;
 
 	// Init QSound z80
 	if (QsndZInit()) {
@@ -35,7 +36,43 @@ INT32 QsndInit()
 		nRate = 11025;
 	}
 
-	QscInit(nRate);		// Init QSound chip
+	nVolumeShift = 0;
+#ifdef QSOUND_FBNEO
+	// These games are too soft at normal volumes
+	if (strncmp(BurnDrvGetTextA(DRV_NAME), "punisher", 8) == 0) {
+		nVolumeShift = 2;
+	}
+	if (strncmp(BurnDrvGetTextA(DRV_NAME), "csclub", 6) == 0) {
+		nVolumeShift = 1;
+	}
+#if 0
+	// These games are loud at normal volumes (no clipping)
+	if (strncmp(BurnDrvGetTextA(DRV_NAME), "1944",	  4) == 0 ||
+		strcmp( BurnDrvGetTextA(DRV_NAME), "dimahoo"  ) == 0 ||
+		strcmp( BurnDrvGetTextA(DRV_NAME), "gmahoo"   ) == 0)
+	{
+		nVolumeShift = -1;
+	}
+#endif
+	// These games are too loud at normal volumes (no clipping)
+	if (strncmp(BurnDrvGetTextA(DRV_NAME), "sgemf",  5) == 0 ||
+		strncmp(BurnDrvGetTextA(DRV_NAME), "pfght",  5) == 0 ||
+		strncmp(BurnDrvGetTextA(DRV_NAME), "mpang",  5) == 0 ||
+		strncmp(BurnDrvGetTextA(DRV_NAME), "spf2",   4) == 0 ||
+		strncmp(BurnDrvGetTextA(DRV_NAME), "sfa2",   4) == 0 ||
+		strncmp(BurnDrvGetTextA(DRV_NAME), "sfa2",   4) == 0)
+	{
+		nVolumeShift = -1;
+	}
+	// These games are too loud at normal volumes (clipping)
+	if (strncmp(BurnDrvGetTextA(DRV_NAME), "19xx",   4) == 0 ||
+		strncmp(BurnDrvGetTextA(DRV_NAME), "ddtod",  5) == 0)
+	{
+		nVolumeShift = -2;
+	}
+#endif
+
+	QscInit(nRate, nVolumeShift);		// Init QSound chip
 
 	return 0;
 }
@@ -47,10 +84,14 @@ void QsndSetRoute(INT32 nIndex, double nVolume, INT32 nRouteDir)
 
 void QsndReset()
 {
+#ifndef QSOUND_FBNEO
 	ZetOpen(0);
+#endif
 	BurnTimerReset();
 	BurnTimerSetRetrig(0, 1.0 / 252.0);
+#ifndef QSOUND_FBNEO
 	ZetClose();
+#endif
 
 	nQsndCyclesExtra = 0;
 }
@@ -61,7 +102,7 @@ void QsndExit()
 	QsndZExit();
 }
 
-INT32 QsndScan(INT32 nAction)
+int QsndScan(int nAction)
 {
 	if (nAction & ACB_DRIVER_DATA) {
 		QsndZScan(nAction);				// Scan Z80
@@ -92,7 +133,11 @@ void QsndEndFrame()
 
 void QsndSyncZ80()
 {
+#ifdef QSOUND_FBNEO
+	int nCycles = (long long int)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
+#else
 	int nCycles = (long long)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
+#endif
 
 	if (nCycles <= ZetTotalCycles()) {
 		return;

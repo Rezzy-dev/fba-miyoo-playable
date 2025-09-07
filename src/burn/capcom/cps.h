@@ -237,7 +237,7 @@ int QsndZExit();
 int QsndZScan(int nAction);
 
 // qs_c.cpp
-int QscInit(int nRate);
+int QscInit(int nRate, int nVolumeShift);
 void QscSetRoute(INT32 nIndex, double nVolume, INT32 nRouteDir);
 void QscReset();
 void QscExit();
