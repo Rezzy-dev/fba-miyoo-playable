@@ -223,6 +223,7 @@ int  CpsDraw();
 int  CpsRedraw();
 
 int QsndInit();
+void QsndSetRoute(INT32 nIndex, double nVolume, INT32 nRouteDir);
 void QsndExit();
 void QsndReset();
 void QsndNewFrame();
@@ -237,12 +238,20 @@ int QsndZScan(int nAction);
 
 // qs_c.cpp
 int QscInit(int nRate, int nVolumeShift);
+void QscSetRoute(INT32 nIndex, double nVolume, INT32 nRouteDir);
 void QscReset();
 void QscExit();
 int QscScan(int nAction);
 void QscNewFrame();
 void QscWrite(int a, int d);
 int QscUpdate(int nEnd);
+
+// cps_tile.cpp
+extern unsigned int* CpstPal;
+extern unsigned int nCpstType; extern int nCpstX,nCpstY;
+extern unsigned int nCpstTile; extern int nCpstFlip;
+extern short* CpstRowShift;
+extern unsigned int CpstPmsk; // Pixel mask
 
 // Sound outputs
 #define BURN_SND_QSND_OUTPUT_1			0
@@ -258,13 +267,6 @@ int QscUpdate(int nEnd);
 
 // Macro to determine the size of a struct up to and including "member"
 #define STRUCT_SIZE_HELPER(type, member) offsetof(type, member) + sizeof(((type*)0)->member)
-
-// cps_tile.cpp
-extern unsigned int* CpstPal;
-extern unsigned int nCpstType; extern int nCpstX,nCpstY;
-extern unsigned int nCpstTile; extern int nCpstFlip;
-extern short* CpstRowShift;
-extern unsigned int CpstPmsk; // Pixel mask
 
 inline static void CpstSetPal(int nPal)
 {

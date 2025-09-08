@@ -23,6 +23,9 @@ PERL = 1
 # Profile Guided Optimization : 0, YES, APPLY
 PROFILE ?= 0
 
+# Use latest code of FBNEO for QSound emulation in cp
+QSOUND_FBNEO ?= 0 #
+
 # Choose emulation cores
 #BUILD_A68K = 1
 #BUILD_C68K = 1
@@ -166,7 +169,7 @@ depobj	+=	\
 		\
 		cps.o cps_config.o cps_draw.o cps_mem.o cps_obj.o cps_pal.o cps_run.o \
 		cps2_crpt.o cps_rw.o cps_scr.o cpsr.o cpsrd.o \
-		cpst.o ctv.o ps.o ps_m.o ps_z.o qs.o qs_c.o qs_z.o \
+		cpst.o ctv.o ps.o ps_m.o ps_z.o qs.o qs_z.o \
 		kabuki.o \
 		\
 		neogeo.o neo_run.o neo_decrypt.o neo_text.o neo_sprite.o neo_palette.o neo_upd4990a.o \
@@ -196,6 +199,12 @@ depobj	+=	\
 		#dec_aud.o dec_misc.o dec_vid.o \
 
 		#i8039.o m6502.o m6502_intf.o nec.o sh2.o z80.o z80daisy.o cz80.o \
+
+ifeq ($(QSOUND_FBNEO),1)
+depobj	+=	qs_c_neo.o
+else
+depobj	+=	qs_c.o
+endif
 
 autobj += $(depobj)
 
@@ -299,6 +308,10 @@ DEF = -DCPUTYPE=$(CPUTYPE) -DBUILD_SDL -DUSE_SPEEDHACKS -DOOPSWARE_FIX
 
 ifdef SPECIALBUILD
 	DEF += -DSPECIALBUILD=$(SPECIALBUILD)
+endif
+
+ifeq ($(QSOUND_FBNEO),1)
+	DEF += -DUSE_QSOUND_FBNEO
 endif
 
 ifdef	DEBUG

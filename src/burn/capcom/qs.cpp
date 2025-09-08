@@ -37,7 +37,7 @@ int QsndInit()
 	}
 
 	nVolumeShift = 0;
-
+#ifdef USE_QSOUND_FBNEO
 	// These games are too soft at normal volumes
 	if (strncmp(BurnDrvGetTextA(DRV_NAME), "punisher", 8) == 0) {
 		nVolumeShift = 2;
@@ -70,16 +70,28 @@ int QsndInit()
 	{
 		nVolumeShift = -2;
 	}
+#endif
 
 	QscInit(nRate, nVolumeShift);		// Init QSound chip
 
 	return 0;
 }
 
+void QsndSetRoute(INT32 nIndex, double nVolume, INT32 nRouteDir)
+{
+	QscSetRoute(nIndex, nVolume, nRouteDir);
+}
+
 void QsndReset()
 {
+#ifndef USE_QSOUND_FBNEO
+	ZetOpen(0);
+#endif
 	BurnTimerReset();
 	BurnTimerSetRetrig(0, 1.0 / 252.0);
+#ifndef USE_QSOUND_FBNEO
+	ZetClose();
+#endif
 
 	nQsndCyclesExtra = 0;
 }
@@ -121,7 +133,11 @@ void QsndEndFrame()
 
 void QsndSyncZ80()
 {
+#ifdef USE_QSOUND_FBNEO
 	int nCycles = (long long int)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
+#else
+	int nCycles = (long long)SekTotalCycles() * nCpsZ80Cycles / nCpsCycles;
+#endif
 
 	if (nCycles <= ZetTotalCycles()) {
 		return;
