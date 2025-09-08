@@ -12,6 +12,8 @@ make -j$(nproc)
 ```
 make -j$(nproc) ipk
 ```
+the current release comes with old QSound emu, 
+if you want original audio in CP System then use `QSOUND_FBNEO=1` make flag
 
 ### Native build (linux):
 
